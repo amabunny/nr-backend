@@ -14,20 +14,30 @@ export class DpsProvider {
 
   constructor(@InjectBrowser() private readonly browser: Browser) {}
 
-  public async getCityInfo({
-    scrollFeedCount,
-  }: IGetCityInfoParams): Promise<string> {
+  public async getCityInfo({ scrollFeedCount }: IGetCityInfoParams) {
     const page = await this.browser?.newPage();
     await page?.goto(DpsProvider.STERLITAMAK_DPS_VK_URL);
 
     for (let i = 0; i < scrollFeedCount; i++) {
-      await page?.$eval('body', (element) => {
+      const newsletterResponse = page?.waitForResponse((r) =>
+        r?.url().includes('al_wall'),
+      );
+
+      page?.$eval('body', (element) => {
         element.scrollIntoView({ block: 'end' });
       });
 
-      await page?.waitForRequest(
-        (r) => r.response()?.url().includes('al_wall') || true,
-      );
+      await newsletterResponse;
+
+      if (i === 0) {
+        await page?.waitForSelector('.JoinForm__notNow');
+
+        await page?.$eval('.JoinForm__notNow', (element) => {
+          (element as any).click();
+        });
+      }
+
+      await page?.waitForTimeout(1000);
     }
 
     const texts = await page?.$$eval(
