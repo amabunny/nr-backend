@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { DpsProvider } from '../providers';
 
 @Controller()
@@ -10,7 +10,7 @@ export class DpsController {
     @Query() params: { offset: string },
   ): Promise<string> {
     return this.dpsProvider.getCityInfo({
-      scrollFeedCount: Number(params.offset || 1),
+      scrollFeedCount: Number(params.offset || 0),
     });
   }
 }
