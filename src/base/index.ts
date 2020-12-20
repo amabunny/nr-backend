@@ -4,7 +4,7 @@ import { DpsController } from './controllers';
 import { DpsProvider } from './providers';
 
 @Module({
-  imports: [PuppeteerModule.forRoot()],
+  imports: [PuppeteerModule.forRoot({})],
   controllers: [DpsController],
   providers: [DpsProvider],
 })
