@@ -4,7 +4,7 @@ import { Browser } from 'puppeteer';
 import { IPostInfo } from '../types/dps.types';
 
 interface IGetCityInfoParams {
-  scrollFeedCount?: number;
+  scrollFeedCount: number;
 }
 
 @Injectable()
@@ -15,7 +15,7 @@ export class DpsProvider {
   constructor(@InjectBrowser() private readonly browser: Browser) {}
 
   public async getCityInfo({
-    scrollFeedCount = 3,
+    scrollFeedCount,
   }: IGetCityInfoParams): Promise<string> {
     const page = await this.browser?.newPage();
     await page?.goto(DpsProvider.STERLITAMAK_DPS_VK_URL);
@@ -25,7 +25,9 @@ export class DpsProvider {
         element.scrollIntoView({ block: 'end' });
       });
 
-      await page?.waitForRequest((r) => r.response()?.url().includes('al_wall') || true);
+      await page?.waitForRequest(
+        (r) => r.response()?.url().includes('al_wall') || true,
+      );
     }
 
     const texts = await page?.$$eval(
