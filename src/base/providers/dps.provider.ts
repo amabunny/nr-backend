@@ -47,13 +47,15 @@ export class DpsProvider {
           author: el?.querySelector('.author')?.textContent || '',
           text: el?.querySelector('.wall_post_text')?.textContent || '',
           time: el?.querySelector('.rel_date')?.textContent || '',
-          replies: Array.from(el.querySelectorAll('.reply_content')).map(
-            (el): IPostInfo => ({
-              author: el?.querySelector('.reply_author')?.textContent || '',
-              text: el?.querySelector('.reply_text')?.textContent || '',
-              time: el?.querySelector('.rel_date')?.textContent || '',
-            }),
-          ),
+          replies: Array.from(el.querySelectorAll('.reply_content'))
+            .map(
+              (el): IPostInfo => ({
+                author: el?.querySelector('.reply_author')?.textContent || '',
+                text: el?.querySelector('.reply_text')?.textContent || '',
+                time: el?.querySelector('.rel_date')?.textContent || '',
+              }),
+            )
+            .filter(({ text }) => Boolean(text)),
         };
       }),
     );
