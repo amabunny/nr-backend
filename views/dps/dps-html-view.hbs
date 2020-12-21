@@ -9,25 +9,46 @@
       body {
         font-family: sans-serif;
         padding: 10px;
+        color: white;
+        background-color: rgb(44,44,46);
+      }
+
+      .post {
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        box-shadow: 1px 2px 6px 3px rgba(255, 255,255, 0.1);
+        border-radius: 20px;
+      }
+
+      .reply-post {
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+
+      h3 {
+        text-align: center;
+        margin-bottom: 30px;
       }
     </style>
   </head>
 
   <body>
+    <h3>
+      Стерлитамак-ДПС
+    </h3>
+
     {{#each posts}}
-      <div>
-        <div>
+      <div class="post">
+        <div class="main-post">
           <b>{{this.time}}:</b> {{ this.text }}
         </div>
 
         {{#each this.replies}}
-          <div style="padding-left: 10px">
+          <div class="reply-post">
             - {{ this.text }}
           </div>
         {{/each}}
       </div>
-
-      <br />
     {{/each}}
   </body>
 </html>
