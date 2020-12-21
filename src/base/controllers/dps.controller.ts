@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Render } from '@nestjs/common';
 import { DpsProvider } from '../providers';
 
 interface IGetCityInfoParams {
@@ -13,5 +13,12 @@ export class DpsController {
   public async getCityInfo(@Query() params: IGetCityInfoParams) {
     const scrollFeedCount = Number(params.offset || 0);
     return this.dpsProvider.getCityInfo({ scrollFeedCount });
+  }
+
+  @Get('dps/city.html')
+  @Render('dps/dps-html-view')
+  public async getCityInfoHtml(@Query() params: IGetCityInfoParams) {
+    const scrollFeedCount = Number(params.offset || 0);
+    return { posts: await this.dpsProvider.getCityInfo({ scrollFeedCount }) };
   }
 }
