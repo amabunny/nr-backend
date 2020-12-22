@@ -16,8 +16,12 @@
       .post {
         margin-bottom: 15px;
         padding: 13px 15px;
-        border-radius: 12px;
-        border: 2px solid rgba(255,255,255, 0.1);
+        border-radius: 9px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, .3);
+      }
+
+      .text-content {
+        white-space: pre-line;
       }
 
       .reply-post {
@@ -37,18 +41,23 @@
       Стерлитамак-ДПС
     </h3>
 
-    {{#each posts}}
-      <div class="post">
-        <div class="main-post">
-          <b>{{this.time}}:</b> {{ this.text }}
-        </div>
+    <main>
+      {{#each posts}}
+        <article>
+          <p class="post">
+            <span class="main-post">
+              <b>{{this.time}}:</b>
+              <span class="text-content">{{ this.text }}</span>
+            </span>
 
-        {{#each this.replies}}
-          <div class="reply-post">
-            - {{ this.text }}
-          </div>
-        {{/each}}
-      </div>
-    {{/each}}
+            {{#each this.replies}}
+              <span class="reply-post">
+                - {{ this.text }}
+              </span>
+            {{/each}}
+          </p>
+        </article>
+      {{/each}}
+    </main>
   </body>
 </html>

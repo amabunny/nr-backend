@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^7.5.1",
     "@types/puppeteer": "^5.4.2",
     "hbs": "^4.1.1",
+    "html-entities": "^1.4.0",
     "nest-puppeteer": "^1.1.1",
     "puppeteer": "^5.5.0",
     "reflect-metadata": "^0.1.13",
