@@ -13,6 +13,12 @@
         background-color: rgb(44,44,46);
       }
 
+      .time {
+        font-size: 0.8em;
+        margin-bottom: 7px;
+        display: inline-block;
+      }
+
       .post {
         margin-bottom: 15px;
         padding: 13px 15px;
@@ -20,11 +26,16 @@
         box-shadow: 0 2px 3px rgba(0, 0, 0, .3);
       }
 
+      .main-post {
+        margin-bottom: 10px;
+      }
+
       .text-content {
         white-space: pre-line;
       }
 
       .reply-post {
+        display: inline-block;
         margin-top: 10px;
         margin-left: 10px;
       }
@@ -46,11 +57,12 @@
         <article>
           <p class="post">
             <span class="main-post">
-              <b>{{this.time}}:</b>
+              <b class="time">{{this.time}}:</b> <br />
               <span class="text-content">{{ this.text }}</span>
             </span>
 
             {{#each this.replies}}
+              <br />
               <span class="reply-post">
                 - {{ this.text }}
               </span>
