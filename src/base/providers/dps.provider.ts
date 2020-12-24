@@ -46,26 +46,27 @@ export class DpsProvider {
     const texts = await page?.$$eval(POST_SELECTOR, (el): IPostInfo[] =>
       el
         .map((el) => {
+          const relDate = el?.querySelector('.rel_date');
+
           return {
             author: el?.querySelector('.author')?.textContent || '',
             text:
               (el?.querySelector('.wall_post_text') as HTMLDivElement)
                 ?.innerText || '',
-            time:
-              el?.querySelector('.rel_date')?.getAttribute('time') ||
-              el?.querySelector('.rel_date')?.textContent ||
-              '',
+            time: relDate?.getAttribute('time') || relDate?.textContent || '',
             replies: Array.from(el.querySelectorAll('.reply_content'))
-              .map((el) => ({
-                author: el?.querySelector('.reply_author')?.textContent || '',
-                text:
-                  (el?.querySelector('.reply_text') as HTMLDivElement)
-                    ?.innerText || '',
-                time:
-                  el?.querySelector('.rel_date')?.getAttribute('time') ||
-                  el?.querySelector('.rel_date')?.textContent ||
-                  '',
-              }))
+              .map((el) => {
+                const relDate = el?.querySelector('.rel_date');
+
+                return {
+                  author: el?.querySelector('.reply_author')?.textContent || '',
+                  text:
+                    (el?.querySelector('.reply_text') as HTMLDivElement)
+                      ?.innerText || '',
+                  time:
+                    relDate?.getAttribute('time') || relDate?.textContent || '',
+                };
+              })
               .filter(({ text }) => Boolean(text)),
           };
         })
@@ -78,12 +79,16 @@ export class DpsProvider {
 
     return texts.map((post) => ({
       ...post,
-      time: Number(post.time) * DpsProvider.JS_FROM_PHP_TIME_MULTIPLIER,
+      time: isNaN(Number(post.time))
+        ? post.time
+        : Number(post.time) * DpsProvider.JS_FROM_PHP_TIME_MULTIPLIER,
       text: post.text?.trim(),
       replies: post.replies?.map((reply) => ({
         ...reply,
         text: reply.text?.trim(),
-        time: Number(post.time) * DpsProvider.JS_FROM_PHP_TIME_MULTIPLIER,
+        time: isNaN(Number(post.time))
+          ? post.time
+          : Number(post.time) * DpsProvider.JS_FROM_PHP_TIME_MULTIPLIER,
       })),
     }));
   }
