@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectBrowser } from 'nest-puppeteer';
-import { AllHtmlEntities } from 'html-entities';
 import { Browser } from 'puppeteer';
 import { IPostInfo } from '../types/dps.types';
 
@@ -10,9 +9,7 @@ interface IGetCityInfoParams {
 
 @Injectable()
 export class DpsProvider {
-  private static getElementData(element: Element, useHtml: boolean) {
-    return useHtml ? element.innerHTML : element.textContent || '';
-  }
+  private static JS_FROM_PHP_TIME_MULTIPLIER = 1000;
 
   private pageItems = {
     STERLITAMAK_DPS_VK_URL: 'https://vk.com/dpsstr',
@@ -20,18 +17,7 @@ export class DpsProvider {
     POST_SELECTOR: '#group_wall ._post_content',
   };
 
-  private dateFormatter = new Intl.DateTimeFormat('ru', {
-    hour: 'numeric',
-    minute: 'numeric',
-  });
-
   constructor(@InjectBrowser() private readonly browser: Browser) {}
-
-  private formatStringDate(spanTime: string) {
-    const number = Number(spanTime);
-    if (isNaN(number)) return '';
-    return this.dateFormatter.format(number * 1000);
-  }
 
   public async getCityInfo({ scrollFeedCount }: IGetCityInfoParams) {
     const {
@@ -63,14 +49,22 @@ export class DpsProvider {
           return {
             author: el?.querySelector('.author')?.textContent || '',
             text:
-              (el?.querySelector('.wall_post_text') as any)?.innerText || '',
-            time: el?.querySelector('.rel_date')?.textContent || '',
+              (el?.querySelector('.wall_post_text') as HTMLDivElement)
+                ?.innerText || '',
+            time:
+              el?.querySelector('.rel_date')?.getAttribute('time') ||
+              el?.querySelector('.rel_date')?.textContent ||
+              '',
             replies: Array.from(el.querySelectorAll('.reply_content'))
               .map((el) => ({
                 author: el?.querySelector('.reply_author')?.textContent || '',
                 text:
-                  (el?.querySelector('.reply_text') as any)?.innerText || '',
-                time: el?.querySelector('.rel_date')?.textContent || '',
+                  (el?.querySelector('.reply_text') as HTMLDivElement)
+                    ?.innerText || '',
+                time:
+                  el?.querySelector('.rel_date')?.getAttribute('time') ||
+                  el?.querySelector('.rel_date')?.textContent ||
+                  '',
               }))
               .filter(({ text }) => Boolean(text)),
           };
@@ -84,11 +78,12 @@ export class DpsProvider {
 
     return texts.map((post) => ({
       ...post,
-      time: post.time,
+      time: Number(post.time) * DpsProvider.JS_FROM_PHP_TIME_MULTIPLIER,
       text: post.text?.trim(),
       replies: post.replies?.map((reply) => ({
         ...reply,
         text: reply.text?.trim(),
+        time: Number(post.time) * DpsProvider.JS_FROM_PHP_TIME_MULTIPLIER,
       })),
     }));
   }
