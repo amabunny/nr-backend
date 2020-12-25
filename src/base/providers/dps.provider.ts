@@ -9,8 +9,6 @@ interface IGetCityInfoParams {
 
 @Injectable()
 export class DpsProvider {
-  private static JS_FROM_PHP_TIME_MULTIPLIER = 1000;
-
   private pageItems = {
     STERLITAMAK_DPS_VK_URL: 'https://vk.com/dpsstr',
     NEWSLETTER_URL_PART: 'al_wall',
@@ -47,7 +45,7 @@ export class DpsProvider {
         .map((el) => {
           const author = el?.querySelector('.author');
           const relDate = el?.querySelector('.rel_date');
-          const text = el?.querySelector('.wall_post_text') as HTMLDivElement
+          const text = el?.querySelector('.wall_post_text') as HTMLDivElement;
 
           return {
             author: author?.textContent || '',
@@ -57,7 +55,7 @@ export class DpsProvider {
               .map((el) => {
                 const relDate = el?.querySelector('.rel_date');
                 const author = el?.querySelector('.reply_author');
-                const text = el?.querySelector('.reply_text') as HTMLDivElement
+                const text = el?.querySelector('.reply_text') as HTMLDivElement;
 
                 return {
                   author: author?.textContent || '',
@@ -82,7 +80,7 @@ export class DpsProvider {
       replies: post.replies?.map((reply) => ({
         ...reply,
         text: reply.text?.trim(),
-        time: post.time
+        time: post.time,
       })),
     }));
   }
