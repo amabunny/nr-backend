@@ -4,7 +4,12 @@ import { DpsController } from './controllers';
 import { DpsProvider } from './providers';
 
 @Module({
-  imports: [PuppeteerModule.forRoot({})],
+  imports: [
+    PuppeteerModule.forRoot({
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      args: ['--no-sandbox', '--lang=ru-RU,ru'],
+    }),
+  ],
   controllers: [DpsController],
   providers: [DpsProvider],
 })
