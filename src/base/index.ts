@@ -8,7 +8,7 @@ import { DpsProvider } from './providers';
     PuppeteerModule.forRoot({
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
       args: ['--no-sandbox', '--lang=ru,ru-RU'],
-    }),
+    } as any),
   ],
   controllers: [DpsController],
   providers: [DpsProvider],
