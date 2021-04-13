@@ -28,7 +28,7 @@ export class DpsProvider {
     await page?.goto(STERLITAMAK_DPS_VK_URL);
 
     for (let i = 0; i < scrollFeedCount; i++) {
-      const newsletterResponse = page?.waitForResponse((r) =>
+      const newsletterResponse = page?.waitForResponse((r: any) =>
         r?.url().includes(NEWSLETTER_URL_PART),
       );
 
