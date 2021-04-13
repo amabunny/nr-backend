@@ -7,7 +7,7 @@ import { BaseModule } from './base';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath: ['.env.production', '.env.development'],
     }),
     BaseModule,
   ],
